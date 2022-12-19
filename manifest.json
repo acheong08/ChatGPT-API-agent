@@ -10,6 +10,12 @@
     "permissions": [
         "cookies",
         "webRequest",
-        "storage"
-    ]
+        "storage",
+        "tabs",
+        "contextualIdentities"
+    ],
+    "browser_action": {
+        "default_title": "Click here to open ChatGPT",
+        "default_badge_text": "ChatGPT"
+    }
 }
