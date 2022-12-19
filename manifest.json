@@ -1,21 +1,20 @@
 {
-    "name": "ChatGPT API Client",
-    "description": "A module for interacting with the ChatGPT API",
-    "version": "1.0",
-    "manifest_version": 2,
-    "homepage_url": "https://github.com/ChatGPT-Hackers/firefox-client",
-    "background": {
-        "scripts": ["background.js"]
-    },
-    "permissions": [
-        "cookies",
-        "webRequest",
-        "storage",
-        "tabs",
-        "contextualIdentities"
-    ],
-    "browser_action": {
-        "default_title": "Click here to open ChatGPT",
-        "default_badge_text": "ChatGPT"
-    }
+  "name": "ChatGPT API Client",
+  "description": "A module for interacting with the ChatGPT API",
+  "version": "1.0",
+  "manifest_version": 2,
+  "homepage_url": "https://github.com/ChatGPT-Hackers/firefox-client",
+  "background": {
+    "scripts": ["background.js", "browser_handlers.js"]
+  },
+  "permissions": [
+    "cookies",
+    "webRequest",
+    "storage",
+    "tabs",
+    "contextualIdentities"
+  ],
+  "browser_action": {
+    "default_title": "Click here to open ChatGPT"
+  }
 }
