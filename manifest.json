@@ -5,7 +5,7 @@
   "manifest_version": 2,
   "homepage_url": "https://github.com/ChatGPT-Hackers/firefox-client",
   "background": {
-    "scripts": ["background.js", "browser_handlers.js"]
+    "scripts": ["background.js"]
   },
   "permissions": [
     "cookies",
