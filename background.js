@@ -30,7 +30,7 @@ function new_tab() {
         .then((tab) => {
           // Inject the content script into the tab
           browser.tabs.executeScript(tab.id, {
-            file: "content.js",
+            file: "src/content.js",
           });
         });
       // Store container ID in local storage

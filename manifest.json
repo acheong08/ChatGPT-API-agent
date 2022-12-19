@@ -16,5 +16,9 @@
   ],
   "browser_action": {
     "default_title": "Click here to open ChatGPT"
+  },
+  "options_ui": {
+    "page": "popup/options.html",
+    "open_in_tab": true
   }
 }
