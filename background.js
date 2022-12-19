@@ -12,6 +12,15 @@ browser.tabs.onRemoved.addListener(() => {
   });
 });
 
+browser.tabs.onUpdated.addListener((tabId, changeInfo) => {
+  if (changeInfo.status === 'complete') {
+    browser.tabs.executeScript(tabId, {
+      file: 'src/content.js',
+    });
+  }
+});
+
+
 function new_tab() {
   // Create a new container with tabID
   browser.contextualIdentities
@@ -27,12 +36,6 @@ function new_tab() {
           cookieStoreId: container.cookieStoreId,
           url: "https://chat.openai.com",
         })
-        .then((tab) => {
-          // Inject the content script into the tab
-          browser.tabs.executeScript(tab.id, {
-            file: "src/content.js",
-          });
-        });
       // Store container ID in local storage
       browser.storage.local.set({ containerId: container.cookieStoreId });
     });
