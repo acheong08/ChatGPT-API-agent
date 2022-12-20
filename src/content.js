@@ -6,6 +6,10 @@ browser.storage.local.get("endpoint").then((result) => {
   }
   let ws_route = "ws://" + endpoint + "/client/register";
   let ws = new WebSocket(ws_route);
+  // On page refresh or exit, close the websocket connection
+  window.onbeforeunload = function () {
+    ws.close();
+  };
   ws.onopen = function () {
     ws.onmessage = function (event) {
       let data = JSON.parse(event.data);
@@ -50,6 +54,21 @@ browser.storage.local.get("endpoint").then((result) => {
         window
           .fetch("https://chat.openai.com/api/auth/session")
           .then((session_response) => {
+            // Check status code
+            if (session_response.status != 200) {
+              console.log("Error: " + session_response.status);
+              // Return error
+              let chatGPTresponse = {
+                id: data.id,
+                message: "error",
+                data: "Wrong response code",
+                error: "Error: " + session_response.status,
+              };
+              ws.send(JSON.stringify(chatGPTresponse));
+              // refresh page
+              window.location.reload();
+              return;
+            }
             session_response.json().then((session_response_json) => {
               let accessToken = session_response_json.accessToken;
               console.log(accessToken);
