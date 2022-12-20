@@ -7,12 +7,21 @@
   "background": {
     "scripts": ["background.js"]
   },
+  "content_scripts": [
+    {
+      "matches": ["https://chat.openai.com/chat"],
+      "js": ["src/content.js"],
+      "run_at": "document_end"
+    }
+  ],
   "permissions": [
     "cookies",
     "webRequest",
     "storage",
     "tabs",
-    "contextualIdentities"
+    "contextualIdentities",
+    "https://chat.openai.com/*",
+    "http://localhost:8080/*"
   ],
   "browser_action": {
     "default_title": "Click here to open ChatGPT"
