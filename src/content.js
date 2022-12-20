@@ -43,41 +43,37 @@ browser.storage.local.get("endpoint").then((result) => {
               content: { content_type: "text", parts: [request_data.content] },
             },
           ],
-          parent_message_id: request_data.message_id,
+          parent_message_id: request_data.parent_id,
           model: "text-davinci-002-render",
         };
         // Send API request
         window
           .fetch("https://chat.openai.com/api/auth/session")
-          .then((response) => {
-            response.json().then((data) => {
-              let accessToken = data.accessToken;
+          .then((session_response) => {
+            session_response.json().then((session_response_json) => {
+              let accessToken = session_response_json.accessToken;
               console.log(accessToken);
-              // Get user agent
-              let userAgent = navigator.userAgent;
               // Send actual request
               window
                 .fetch("https://chat.openai.com/backend-api/conversation", {
                   method: "POST",
                   headers: {
-                    "Accept": "text/event-stream",
-                    "Authorization": "Bearer " + accessToken,
+                    Accept: "text/event-stream",
+                    Authorization: "Bearer " + accessToken,
                     "Content-Type": "application/json",
-                    "User-Agent": userAgent,
                     "X-Openai-Assistant-App-Id": "",
-                    "Connection": "close",
-                    "Accept-Language": "en-US,en;q=0.9",
-                    "Referer": "https://chat.openai.com/chat",
+                    Connection: "close",
+                    Referer: "https://chat.openai.com/chat",
                   },
                   body: JSON.stringify(payload),
                 })
                 .then((response) => {
-                  response.text().then((response) => {
-                    console.log(response);
+                  response.text().then((conversation_response) => {
+                    console.log(conversation_response);
                     // Split data on "data: " prefix
-                    const dataArray = response.split("data: ");
+                    const dataArray = conversation_response.split("data: ");
                     // Get the second last element of the array
-                    const lastElement = dataArray[dataArray.length - 2];
+                    const lastElement = JSON.parse(dataArray[dataArray.length - 2]);
                     console.log(lastElement);
                     // Construct response
                     let chatGPTresponse = {
