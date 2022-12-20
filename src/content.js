@@ -19,7 +19,7 @@ browser.storage.local.get("endpoint").then((result) => {
         };
         ws.send(JSON.stringify(message));
         browser.storage.local.set({ connectionId: connection_id });
-      } else if (data.message == "ping"){
+      } else if (data.message == "ping") {
         let message = {
           message: "pong",
           id: data.id,
@@ -29,9 +29,12 @@ browser.storage.local.get("endpoint").then((result) => {
       } else if (data.message == "ChatGptRequest") {
         let response = {
           id: data.id,
-          response_id: "somerandomuuid",
-          conversation_id: "somerandomuuid",
-          content: "Hello world!",
+          message: "ChatGptResponse",
+          data: JSON.stringify({
+            response_id: "somerandomuuid",
+            conversation_id: "somerandomuuid",
+            content: "Hello world!",
+          }),
         };
         ws.send(JSON.stringify(response));
       }
