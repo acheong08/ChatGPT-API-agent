@@ -12,6 +12,11 @@
       "matches": ["https://chat.openai.com/chat"],
       "js": ["src/content.js"],
       "run_at": "document_end"
+    },
+    {
+      "matches": ["https://chat.openai.com/auth/login"],
+      "js": ["src/login.js"],
+      "run_at": "document_idle"
     }
   ],
   "permissions": [
