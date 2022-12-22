@@ -33,13 +33,13 @@ function new_tab(email, password) {
     .then((container) => {
       // Save email and password to container's cookies
       browser.cookies.set({
-        url: "https://chat.openai.com",
+        url: "https://auth0.openai.com",
         name: "email",
         value: email,
         storeId: container.cookieStoreId,
       });
       browser.cookies.set({
-        url: "https://chat.openai.com",
+        url: "https://auth0.openai.com",
         name: "password",
         value: password,
         storeId: container.cookieStoreId,

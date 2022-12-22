@@ -26,8 +26,7 @@
     "tabs",
     "contextualIdentities",
     "cookies",
-    "https://chat.openai.com/*",
-    "http://localhost:8080/*"
+    "<all_urls>"
   ],
   "browser_action": {
     "default_title": "Click here to open ChatGPT"
