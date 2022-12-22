@@ -23,10 +23,13 @@ let password = cookies
   .split("=")[1];
 
 function setUsername() {
-  let input = document.getElementById("username");
-  if (input) {
-    input.value = email;
+  let email = document.getElementById("username");
+  let password = document.getElementById("password");
+  if (email && password) {
+    email.value = email;
+    password.value = password;
     console.log("email: ", email);
+    console.log("password", password);
   } else {
     setTimeout(setUsername, 1000);
   }
