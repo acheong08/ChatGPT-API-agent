@@ -7,7 +7,7 @@ browser.storage.local.get("endpoint").then((result) => {
   let ws_route = "ws://" + endpoint + "/client/register";
   let ws = new WebSocket(ws_route);
   // On page refresh or exit, close the websocket connection
-  window.onbeforeunload = function () {
+  window.onunload = function () {
     ws.close();
   };
   ws.onopen = function () {
@@ -57,6 +57,7 @@ browser.storage.local.get("endpoint").then((result) => {
             // Check status code
             if (session_response.status != 200) {
               console.log("Error: " + session_response.status);
+              console.log(session_response)
               // Return error
               let chatGPTresponse = {
                 id: data.id,
@@ -65,6 +66,8 @@ browser.storage.local.get("endpoint").then((result) => {
                 error: "Error: " + session_response.status,
               };
               ws.send(JSON.stringify(chatGPTresponse));
+              // Close websocket connection
+              ws.close();
               // refresh page
               window.location.reload();
               return;
