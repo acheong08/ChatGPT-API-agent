@@ -6,8 +6,6 @@ let button = document.querySelector(
   ".btn.flex.justify-center.gap-2.btn-primary"
 );
 
-console.log("button: ", button);
-
 if (button && button.innerText === "Log in") {
   button.click();
 } else {
@@ -23,16 +21,24 @@ let password = cookies
   .split("=")[1];
 
 function setUsername() {
-  let email = document.getElementById("username");
-  let password = document.getElementById("password");
-  if (email && password) {
-    email.value = email;
-    password.value = password;
+  let emailForm = document.getElementById("username");
+  if (emailForm) {
+    emailForm.value = email;
     console.log("email: ", email);
-    console.log("password", password);
   } else {
     setTimeout(setUsername, 1000);
   }
 }
 
 setUsername();
+
+function setPassword() {
+    let passwordForm = document.getElementById("password");
+    if (passwordForm) {
+        passwordForm.value = password;
+        console.log("password: ", password);
+    } else {
+        setTimeout(setPassword, 1000);
+    }
+}
+setPassword();
