@@ -4,11 +4,14 @@ browser.browserAction.onClicked.addListener(() => {
   new_tab();
 });
 
-browser.tabs.onRemoved.addListener(() => {
-  // Get container ID from local storage
-  browser.storage.local.get("containerId").then((result) => {
-    // Delete the container
-    browser.contextualIdentities.remove(result.containerId);
+browser.tabs.onRemoved.addListener((tabID) => {
+  // Delete the container with the tabID as the name OpenAI (tabID)
+  browser.contextualIdentities.query({}).then((containers) => {
+    containers.forEach((container) => {
+      if (container.name == "OpenAI (" + tabID + ")") {
+        browser.contextualIdentities.remove(container.cookieStoreId);
+      }
+    });
   });
 });
 
@@ -22,11 +25,16 @@ function new_tab() {
     })
     .then((container) => {
       // Create a new tab in the container with the tabID and URL
-      browser.tabs.create({
-        cookieStoreId: container.cookieStoreId,
-        url: "https://chat.openai.com",
-      });
-      // Store container ID in local storage
-      browser.storage.local.set({ containerId: container.cookieStoreId });
+      browser.tabs
+        .create({
+          cookieStoreId: container.cookieStoreId,
+          url: "https://chat.openai.com",
+        })
+        .then((tabID) => {
+          // Add the tabID to the container
+          browser.contextualIdentities.update(container.cookieStoreId, {
+            name: "OpenAI (" + tabID.id + ")",
+          });
+        });
     });
 }
