@@ -1,0 +1,86 @@
+/* options.css */
+
+/* Style the "Add Credential" button */
+button#add-credential {
+  background-color: #4caf50;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+button#add-credential:hover {
+  background-color: #45a049;
+}
+
+/* Style the credential popup */
+.popup {
+  display: none; /* Hide the popup by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+/* Style the form in the popup */
+.popup form {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+/* Style the "Save" button in the popup */
+.popup button[type="submit"] {
+  background-color: #4caf50;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.popup button[type="submit"]:hover {
+  background-color: #45a049;
+}
+
+/* Style the "Save" button in the form */
+button[type="submit"] {
+  background-color: #4caf50;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+button[type="submit"]:hover {
+  background-color: #45a049;
+}
+
+/* Style the credential list */
+.credential-list {
+  margin-top: 20px;
+}
+
+table {
+  /* Table border */
+  border: 1px solid rgb(0, 0, 0);
+  border-collapse: collapse;
+  width: 80%;
+  margin: 1rem
+}
+
+td{
+  border: 1px solid rgb(0, 0, 0);
+  padding: 5px;
+}

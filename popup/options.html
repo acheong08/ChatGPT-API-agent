@@ -2,12 +2,39 @@
 <html>
   <head>
     <script src="options.js" defer></script>
+    <!-- options.css -->
+    <link rel="stylesheet" href="options.css" />
   </head>
   <body>
     <form>
       <label for="endpoint">Endpoint:</label>
-      <input type="text" id="endpoint" name="endpoint">
-      <button type="submit">Save</button>
+      <input type="text" id="endpoint" name="endpoint" />
     </form>
+    <!-- Allow the user to add credentials -->
+    <div>
+      <button id="add-credential">Add Credential</button>
+    </div>
+    <!-- Popup to enter email and password -->
+    <div class="popup" id="credential-popup">
+      <form>
+        <label for="email">Email:</label>
+        <input type="text" id="email" name="email" />
+        <br />
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" />
+        <br />
+        <button type="submit" id="submit-credential">Save</button>
+      </form>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Email</th>
+          <th>Password</th>
+        </tr>
+      </thead>
+      <tbody id="credential-list"></tbody>
+    </table>
+    <button type="submit" id="save">Save</button>
   </body>
 </html>
