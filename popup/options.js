@@ -7,6 +7,7 @@ const credentialPopup = document.getElementById("credential-popup");
 const credentialList = document.getElementById("credential-list");
 const submitCredentialButton = document.getElementById("submit-credential");
 let save = document.querySelector("#save");
+let clear = document.querySelector("#clear");
 
 // Get the endpoint string from the extension's storage (if it exists)
 browser.storage.local.get("endpoint").then((result) => {
@@ -75,7 +76,7 @@ submitCredentialButton.addEventListener("click", (event) => {
 });
 
 // Add an event listener for the submit event
-save.addEventListener("submit", function (event) {
+save.addEventListener("click", function (event) {
   // Prevent the form from being submitted
   event.preventDefault();
 
@@ -84,4 +85,21 @@ save.addEventListener("submit", function (event) {
 
   // Save the endpoint string to the extension's storage
   browser.storage.local.set({ endpoint: endpoint });
+});
+
+clear.addEventListener("click", function (event) {
+  // Prevent the form from being submitted
+  event.preventDefault();
+
+  // Clear the endpoint string from the extension's storage
+  browser.storage.local.remove("endpoint");
+
+  // Clear the endpoint string from the form
+  document.querySelector("#endpoint").value = "";
+
+  // Clear credentials 
+  credentials = [];
+  browser.storage.local.remove("credentials");
+  // Refresh the page
+  location.reload();
 });

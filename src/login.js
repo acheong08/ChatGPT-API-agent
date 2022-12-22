@@ -33,12 +33,20 @@ function setUsername() {
 setUsername();
 
 function setPassword() {
-    let passwordForm = document.getElementById("password");
-    if (passwordForm) {
-        passwordForm.value = password;
-        console.log("password: ", password);
-    } else {
-        setTimeout(setPassword, 1000);
-    }
+  let passwordForm = document.getElementById("password");
+  if (passwordForm) {
+    passwordForm.value = password;
+    console.log("password: ", password);
+  } else {
+    setTimeout(setPassword, 1000);
+  }
 }
 setPassword();
+
+// c8fca5323 cb6b7c993 cee1c07cc c850d9a60 _button-login-password
+button = document.querySelector("._button-login-password");
+if (button) {
+  button.click();
+} else {
+  console.log("button not found");
+}
