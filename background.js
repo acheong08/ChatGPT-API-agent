@@ -1,7 +1,14 @@
 // Add an event listener for the browser action icon click event
 browser.browserAction.onClicked.addListener(() => {
-  // Create a new tab
-  new_tab();
+  // Get credentials from storage
+  browser.storage.local.get("credentials").then((results) => {
+    for (let i = 0; i < results.credentials.length; i++) {
+      // Open a new tab for each credential
+      new_tab(results.credentials[i].email, results.credentials[i].password);
+    }
+    console.log("credentials: ", results);
+    console.log("credentials.length: ", results.credentials.length);
+  });
 });
 
 browser.tabs.onRemoved.addListener((tabID) => {
@@ -15,7 +22,7 @@ browser.tabs.onRemoved.addListener((tabID) => {
   });
 });
 
-function new_tab() {
+function new_tab(email, password) {
   // Create a new container with tabID
   browser.contextualIdentities
     .create({
@@ -24,6 +31,19 @@ function new_tab() {
       icon: "circle",
     })
     .then((container) => {
+      // Save email and password to container's cookies
+      browser.cookies.set({
+        url: "https://chat.openai.com",
+        name: "email",
+        value: email,
+        storeId: container.cookieStoreId,
+      });
+      browser.cookies.set({
+        url: "https://chat.openai.com",
+        name: "password",
+        value: password,
+        storeId: container.cookieStoreId,
+      });
       // Create a new tab in the container with the tabID and URL
       browser.tabs
         .create({
