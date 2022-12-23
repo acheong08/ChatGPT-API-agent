@@ -57,7 +57,7 @@ browser.storage.local.get("endpoint").then((result) => {
             // Check status code
             if (session_response.status != 200) {
               console.log("Error: " + session_response.status);
-              console.log(session_response)
+              console.log(session_response);
               // Return error
               let chatGPTresponse = {
                 id: data.id,
@@ -95,7 +95,9 @@ browser.storage.local.get("endpoint").then((result) => {
                     // Split data on "data: " prefix
                     const dataArray = conversation_response.split("data: ");
                     // Get the second last element of the array
-                    const lastElement = JSON.parse(dataArray[dataArray.length - 2]);
+                    const lastElement = JSON.parse(
+                      dataArray[dataArray.length - 2]
+                    );
                     console.log(lastElement);
                     // Construct response
                     let chatGPTresponse = {
@@ -109,8 +111,36 @@ browser.storage.local.get("endpoint").then((result) => {
                     };
                     ws.send(JSON.stringify(chatGPTresponse));
                   });
+                })
+                .catch((error) => {
+                  console.log(error);
+                  // Return error
+                  let chatGPTresponse = {
+                    id: data.id,
+                    message: "error",
+                    data: "Unknown error",
+                    error: error,
+                  };
+                  ws.send(JSON.stringify(chatGPTresponse));
+                  // Close websocket connection
+                  ws.close();
+                  return;
                 });
             });
+          })
+          .catch((error) => {
+            console.log(error);
+            // Return error
+            let chatGPTresponse = {
+              id: data.id,
+              message: "error",
+              data: "Unknown error",
+              error: error,
+            };
+            ws.send(JSON.stringify(chatGPTresponse));
+            // Close websocket connection
+            ws.close();
+            return;
           });
       }
     };
