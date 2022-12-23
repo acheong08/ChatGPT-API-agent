@@ -48,6 +48,7 @@ browser.storage.local.get("endpoint").then((result) => {
             },
           ],
           parent_message_id: request_data.parent_id,
+          conversation_id: request_data.conversation_id,
           model: "text-davinci-002-render",
         };
         // Send API request
