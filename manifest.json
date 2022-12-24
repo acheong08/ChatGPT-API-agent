@@ -25,7 +25,6 @@
     "storage",
     "tabs",
     "contextualIdentities",
-    "cookies",
     "<all_urls>"
   ],
   "browser_action": {
