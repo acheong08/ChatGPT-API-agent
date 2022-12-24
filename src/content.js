@@ -73,61 +73,77 @@ browser.storage.local.get("endpoint").then((result) => {
               window.location.reload();
               return;
             }
-            session_response.json().then((session_response_json) => {
-              let accessToken = session_response_json.accessToken;
-              console.log(accessToken);
-              // Send actual request
-              window
-                .fetch("https://chat.openai.com/backend-api/conversation", {
-                  method: "POST",
-                  headers: {
-                    Accept: "text/event-stream",
-                    Authorization: "Bearer " + accessToken,
-                    "Content-Type": "application/json",
-                    "X-Openai-Assistant-App-Id": "",
-                    Connection: "close",
-                    Referer: "https://chat.openai.com/chat",
-                  },
-                  body: JSON.stringify(payload),
-                })
-                .then((response) => {
-                  response.text().then((conversation_response) => {
-                    console.log(conversation_response);
-                    // Split data on "data: " prefix
-                    const dataArray = conversation_response.split("data: ");
-                    // Get the second last element of the array
-                    const lastElement = JSON.parse(
-                      dataArray[dataArray.length - 2]
-                    );
-                    console.log(lastElement);
-                    // Construct response
+            session_response
+              .json()
+              .then((session_response_json) => {
+                let accessToken = session_response_json.accessToken;
+                console.log(accessToken);
+                // Send actual request
+                window
+                  .fetch("https://chat.openai.com/backend-api/conversation", {
+                    method: "POST",
+                    headers: {
+                      Accept: "text/event-stream",
+                      Authorization: "Bearer " + accessToken,
+                      "Content-Type": "application/json",
+                      "X-Openai-Assistant-App-Id": "",
+                      Connection: "close",
+                      Referer: "https://chat.openai.com/chat",
+                    },
+                    body: JSON.stringify(payload),
+                  })
+                  .then((response) => {
+                    response.text().then((conversation_response) => {
+                      console.log(conversation_response);
+                      // Split data on "data: " prefix
+                      const dataArray = conversation_response.split("data: ");
+                      // Get the second last element of the array
+                      const lastElement = JSON.parse(
+                        dataArray[dataArray.length - 2]
+                      );
+                      console.log(lastElement);
+                      // Construct response
+                      let chatGPTresponse = {
+                        id: data.id,
+                        message: "ChatGptResponse",
+                        data: JSON.stringify({
+                          response_id: lastElement.message.id,
+                          conversation_id: lastElement.conversation_id,
+                          content: lastElement.message.content.parts[0],
+                        }),
+                      };
+                      ws.send(JSON.stringify(chatGPTresponse));
+                    });
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                    // Return error
                     let chatGPTresponse = {
                       id: data.id,
-                      message: "ChatGptResponse",
-                      data: JSON.stringify({
-                        response_id: lastElement.message.id,
-                        conversation_id: lastElement.conversation_id,
-                        content: lastElement.message.content.parts[0],
-                      }),
+                      message: "error",
+                      data: "Unknown error",
+                      error: error,
                     };
                     ws.send(JSON.stringify(chatGPTresponse));
+                    // Close websocket connection
+                    ws.close();
+                    return;
                   });
-                })
-                .catch((error) => {
-                  console.log(error);
-                  // Return error
-                  let chatGPTresponse = {
-                    id: data.id,
-                    message: "error",
-                    data: "Unknown error",
-                    error: error,
-                  };
-                  ws.send(JSON.stringify(chatGPTresponse));
-                  // Close websocket connection
-                  ws.close();
-                  return;
-                });
-            });
+              })
+              .catch((error) => {
+                console.log(error);
+                // Return error
+                let chatGPTresponse = {
+                  id: data.id,
+                  message: "error",
+                  data: "Unknown error",
+                  error: error,
+                };
+                ws.send(JSON.stringify(chatGPTresponse));
+                // Close websocket connection
+                ws.close();
+                return;
+              });
           })
           .catch((error) => {
             console.log(error);
