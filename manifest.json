@@ -34,5 +34,10 @@
   "options_ui": {
     "page": "popup/options.html",
     "open_in_tab": true
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "acheong@student.dalat.org"
+    }
   }
 }
