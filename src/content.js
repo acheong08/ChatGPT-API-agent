@@ -2,8 +2,10 @@ browser.storage.local.get("endpoint").then((result) => {
   const endpoint = result.endpoint || "localhost:8080";
   const wsRoute = "ws://" + endpoint + "/client/register";
   const ws = new WebSocket(wsRoute);
-  // On page refresh or exit, close the websocket connection
+  console.log("Connecting to " + wsRoute)
+
   window.onunload = function () {
+    console.info("Connection closed")
     ws.close();
   };
 
@@ -36,6 +38,7 @@ browser.storage.local.get("endpoint").then((result) => {
       }
     };
   };
+
   ws.onclose = function () {
     console.info("Connection closed");
     delete connectionId;
