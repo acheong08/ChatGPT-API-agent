@@ -1,7 +1,7 @@
 browser.storage.local.get("endpoint").then((result) => {
   const endpoint = result.endpoint || "localhost:8080";
-  const ws_route = "ws://" + endpoint + "/client/register";
-  const ws = new WebSocket(ws_route);
+  const wsRoute = "ws://" + endpoint + "/client/register";
+  const ws = new WebSocket(wsRoute);
   // On page refresh or exit, close the websocket connection
   window.onunload = function () {
     ws.close();
@@ -23,14 +23,14 @@ browser.storage.local.get("endpoint").then((result) => {
   };
   ws.onclose = function () {
     console.info("Connection closed");
-    delete connection_id;
+    delete connectionId;
   };
 });
 
 function handleConnectionId(ws, data) {
-  connection_id = data.id;
-  sendWebSocketMessage(ws, connection_id, "Connection id", "");
-  browser.storage.local.set({ connectionId: connection_id });
+  connectionId = data.id;
+  sendWebSocketMessage(ws, connectionId, "Connection id", "");
+  browser.storage.local.set({ connectionId });
 }
 
 function handlePing(ws, data) {
@@ -39,43 +39,43 @@ function handlePing(ws, data) {
 
 function handleChatGptRequest(ws, data) {
   // Construct API request
-  const request_data = JSON.parse(data.data);
+  const requestData = JSON.parse(data.data);
   // If conversation_id is "", make it undefined
-  if (request_data.conversation_id == "") {
-    request_data.conversation_id = undefined;
+  if (requestData.conversation_id == "") {
+    requestData.conversation_id = undefined;
   }
   // Payload
   const payload = {
     action: "next",
     messages: [
       {
-        id: request_data.message_id,
+        id: requestData.message_id,
         role: "user",
-        content: { content_type: "text", parts: [request_data.content] },
+        content: { content_type: "text", parts: [requestData.content] },
       },
     ],
-    parent_message_id: request_data.parent_id,
-    conversation_id: request_data.conversation_id,
+    parent_message_id: requestData.parent_id,
+    conversation_id: requestData.conversation_id,
     model: "text-davinci-002-render",
   };
   // Send API request
   window
     .fetch("https://chat.openai.com/api/auth/session")
-    .then((session_response) => {
+    .then((sessionResponse) => {
       // Check status code
-      if (session_response.status != 200) {
-        console.error("Error: " + session_response.status);
-        console.error(`session_response ${JSON.stringify(session_response)}`);
+      if (sessionResponse.status != 200) {
+        console.error("Error: " + sessionResponse.status);
+        console.error(`sessionResponse ${JSON.stringify(sessionResponse)}`);
         // Return error
-        sendWebSocketMessage(ws, data.id, "error", "Wrong response code", "Error: " + session_response.status);
+        sendWebSocketMessage(ws, data.id, "error", "Wrong response code", "Error: " + sessionResponse.status);
         // Close websocket connection
         ws.close();
         // refresh page
         window.location.reload();
         return;
       }
-      session_response.json().then((session_response_json) => {
-        const accessToken = session_response_json.accessToken;
+      sessionResponse.json().then((sessionResponseJson) => {
+        const accessToken = sessionResponseJson.accessToken;
         console.log(`accessToken ${accessToken}`);
         // Send actual request
         window
@@ -92,15 +92,15 @@ function handleChatGptRequest(ws, data) {
             body: JSON.stringify(payload),
           })
           .then((response) => {
-            response.text().then((conversation_response) => {
-              console.log(`conversation_response ${JSON.stringify(conversation_response)}`);
-              // Check if conversation_response can be parsed as JSON
+            response.text().then((conversationResponse) => {
+              console.log(`conversationResponse ${JSON.stringify(conversationResponse)}`);
+              // Check if conversationResponse can be parsed as JSON
               try {
-                resp_json = JSON.parse(conversation_response);
-                if (resp_json.detail) {
-                  console.error("Error: " + resp_json.detail);
+                const respJson = JSON.parse(conversationResponse);
+                if (respJson.detail) {
+                  console.error("Error: " + respJson.detail);
                   // Return error
-                  sendWebSocketMessage(ws, data.id, "error", "Error: " + resp_json.detail);
+                  sendWebSocketMessage(ws, data.id, "error", "Error: " + respJson.detail);
                   // Close websocket connection
                   ws.close();
                   // refresh page
@@ -111,7 +111,7 @@ function handleChatGptRequest(ws, data) {
                 console.log("Not JSON");
               }
               // Split data on "data: " prefix
-              const dataArray = conversation_response.split("data: ");
+              const dataArray = conversationResponse.split("data: ");
               // Get the second last element of the array
               const lastElement = JSON.parse(
                 dataArray[dataArray.length - 2]
@@ -155,13 +155,13 @@ function handleChatGptRequest(ws, data) {
  */
 function sendWebSocketMessage(ws, id, message, data, error) {
   try {
-    const ws_message = {
+    const wsMessage = {
       id: id,
       message: message,
       data: data,
       error
     };
-    ws.send(JSON.stringify(ws_message));
+    ws.send(JSON.stringify(wsMessage));
   } catch (error) {
     console.error("Error sending websocket message")
     console.error(error);
