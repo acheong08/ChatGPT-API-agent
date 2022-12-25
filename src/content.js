@@ -2,17 +2,17 @@ browser.storage.local.get("endpoint").then((result) => {
   const endpoint = result.endpoint || "localhost:8080";
   const wsRoute = "ws://" + endpoint + "/client/register";
   const ws = new WebSocket(wsRoute);
-  console.info("Connecting to " + wsRoute)
+  console.info("Connecting to " + wsRoute);
 
   window.onunload = function () {
-    console.info("Connection closed")
+    console.info("Connection closed");
     ws.close();
   };
 
   ws.onerror = function (error) {
-    console.error("An error occured")
+    console.error("An error occured");
     console.error(error);
-    console.info("Connection closed")
+    console.info("Connection closed");
     ws.close();
   };
 
@@ -46,9 +46,24 @@ browser.storage.local.get("endpoint").then((result) => {
 });
 
 function handleConnectionId(ws, data) {
-  connectionId = data.id;
-  sendWebSocketMessage(ws, connectionId, "Connection id", "");
-  browser.storage.local.set({ connectionId });
+  // Get connection id from cookies (if it exists)
+  const cookies = document.cookie.split(";");
+  let storedConnectionId = "";
+  for (let i = 0; i < cookies.length; i++) {
+    const cookie = cookies[i];
+    if (cookie.includes("connectionId")) {
+      storedConnectionId = cookie.split("=")[1];
+    }
+  }
+  console.log(storedConnectionId);
+  // If it exists, send it to the server
+  if (storedConnectionId) {
+    sendWebSocketMessage(ws, storedConnectionId, "Connection id", "");
+  } else {
+    sendWebSocketMessage(ws, data.id, "Connection id", "");
+    // Store connectionId in cookie
+    document.cookie = "connectionId=" + data.id;
+  }
 }
 
 function handlePing(ws, data) {
@@ -85,7 +100,13 @@ function handleChatGptRequest(ws, data) {
         console.error("Error: " + sessionResponse.status);
         console.error(`sessionResponse ${JSON.stringify(sessionResponse)}`);
         // Return error
-        sendWebSocketMessage(ws, data.id, "error", "Wrong response code", "Error: " + sessionResponse.status);
+        sendWebSocketMessage(
+          ws,
+          data.id,
+          "error",
+          "Wrong response code",
+          "Error: " + sessionResponse.status
+        );
         // Close websocket connection
         ws.close();
         // refresh page
@@ -111,14 +132,21 @@ function handleChatGptRequest(ws, data) {
           })
           .then((response) => {
             response.text().then((conversationResponse) => {
-              console.log(`conversationResponse ${JSON.stringify(conversationResponse)}`);
+              console.log(
+                `conversationResponse ${JSON.stringify(conversationResponse)}`
+              );
               // Check if conversationResponse can be parsed as JSON
               try {
                 const respJson = JSON.parse(conversationResponse);
                 if (respJson.detail) {
                   console.error("Error: " + respJson.detail);
                   // Return error
-                  sendWebSocketMessage(ws, data.id, "error", "Error: " + respJson.detail);
+                  sendWebSocketMessage(
+                    ws,
+                    data.id,
+                    "error",
+                    "Error: " + respJson.detail
+                  );
                   // Close websocket connection
                   ws.close();
                   // refresh page
@@ -131,9 +159,7 @@ function handleChatGptRequest(ws, data) {
               // Split data on "data: " prefix
               const dataArray = conversationResponse.split("data: ");
               // Get the second last element of the array
-              const lastElement = JSON.parse(
-                dataArray[dataArray.length - 2]
-              );
+              const lastElement = JSON.parse(dataArray[dataArray.length - 2]);
               console.log(lastElement);
               // Construct response
               const responseData = JSON.stringify({
@@ -141,7 +167,12 @@ function handleChatGptRequest(ws, data) {
                 conversation_id: lastElement.conversation_id,
                 content: lastElement.message.content.parts[0],
               });
-              sendWebSocketMessage(ws, data.id, "ChatGptResponse", responseData);
+              sendWebSocketMessage(
+                ws,
+                data.id,
+                "ChatGptResponse",
+                responseData
+              );
             });
           })
           .catch((error) => {
@@ -177,11 +208,11 @@ function sendWebSocketMessage(ws, id, message, data, error) {
       id,
       message,
       data,
-      error
+      error,
     };
     ws.send(JSON.stringify(wsMessage));
   } catch (error) {
-    console.error("Error sending websocket message")
+    console.error("Error sending websocket message");
     console.error(error);
   }
 }
