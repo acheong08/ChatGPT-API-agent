@@ -6,6 +6,14 @@ browser.storage.local.get("endpoint").then((result) => {
   window.onunload = function () {
     ws.close();
   };
+
+  ws.onerror = function (error) {
+    console.error("An error occured")
+    console.error(error);
+    console.info("Connection closed")
+    ws.close();
+  };
+
   ws.onopen = function () {
     console.info("Connection opened");
     ws.onmessage = function (event) {
