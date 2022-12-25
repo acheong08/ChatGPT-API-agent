@@ -11,13 +11,20 @@ browser.storage.local.get("endpoint").then((result) => {
     ws.onmessage = function (event) {
       const data = JSON.parse(event.data);
 
-      console.log(data);
-      if (data.message == "Connection id") {
-        handleConnectionId(ws, data);
-      } else if (data.message == "ping") {
-        handlePing(ws, data);
-      } else if (data.message == "ChatGptRequest") {
-        handleChatGptRequest(ws, data);
+      console.log(`data ${JSON.stringify(data)}`);
+      switch (data.message) {
+        case "Connection id":
+          handleConnectionId(ws, data);
+          break;
+        case "ping":
+          handlePing(ws, data);
+          break;
+        case "ChatGptRequest":
+          handleChatGptRequest(ws, data);
+          break;
+        default:
+          console.error("Unknown message: " + data.message);
+          break;
       }
     };
   };
