@@ -2,7 +2,7 @@ browser.storage.local.get("endpoint").then((result) => {
   const endpoint = result.endpoint || "localhost:8080";
   const wsRoute = "ws://" + endpoint + "/client/register";
   const ws = new WebSocket(wsRoute);
-  console.log("Connecting to " + wsRoute)
+  console.info("Connecting to " + wsRoute)
 
   window.onunload = function () {
     console.info("Connection closed")
