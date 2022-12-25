@@ -1,11 +1,7 @@
 # ChatGPT API Agent (Firefox version)
 
 # Setup
-1. `git clone https://github.com/ChatGPT-Hackers/ChatGPT-API-agent`
-2. Download firefox (if you don't already have it)
-3. Open `about:debugging#/runtime/this-firefox` in Firefox
-4. Click `Load Temporary Add-on`
-5. Drag and drop `manifest.json` from `ChatGPT-API-agent` into the popup and press `Select`
+1. Download from [Mozilla Addons](https://addons.mozilla.org/en-US/firefox/addon/chatgpt-api-client/)
 
 # Running
 1. Go to extension preferences
