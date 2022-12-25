@@ -9,7 +9,7 @@ let button = document.querySelector(
 if (button && button.innerText === "Log in") {
   button.click();
 } else {
-  console.log("button not found");
+  console.error("button not found");
 }
 
 // Get credentials from cookies
@@ -48,5 +48,5 @@ button = document.querySelector("._button-login-password");
 if (button) {
   button.click();
 } else {
-  console.log("button not found");
+  console.error("button not found");
 }
