@@ -101,20 +101,7 @@ browser.storage.local.get("endpoint").then((result) => {
                       // Get the second last element of the array
                       const lastElement = JSON.parse(
                         dataArray[dataArray.length - 2]
-                      ).catch((error) => {
-                        console.log(error);
-                        // Return error
-                        let chatGPTresponse = {
-                          id: data.id,
-                          message: "error",
-                          data: "Unknown error",
-                          error: error,
-                        };
-                        ws.send(JSON.stringify(chatGPTresponse));
-                        // Close websocket connection
-                        ws.close();
-                        return;
-                      });
+                      );
 
                       console.log(lastElement);
                       // Construct response
