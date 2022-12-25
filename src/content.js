@@ -10,6 +10,7 @@ browser.storage.local.get("endpoint").then((result) => {
     console.info("Connection opened");
     ws.onmessage = function (event) {
       const data = JSON.parse(event.data);
+
       console.log(data);
       if (data.message == "Connection id") {
         handleConnectionId(ws, data);
@@ -93,6 +94,22 @@ function handleChatGptRequest(ws, data) {
           .then((response) => {
             response.text().then((conversation_response) => {
               console.log(`conversation_response ${JSON.stringify(conversation_response)}`);
+              // Check if conversation_response can be parsed as JSON
+              try {
+                resp_json = JSON.parse(conversation_response);
+                if (resp_json.detail) {
+                  console.error("Error: " + resp_json.detail);
+                  // Return error
+                  sendWebSocketMessage(ws, data.id, "error", "Error: " + resp_json.detail);
+                  // Close websocket connection
+                  ws.close();
+                  // refresh page
+                  window.location.reload();
+                  return;
+                }
+              } catch (e) {
+                console.log("Not JSON");
+              }
               // Split data on "data: " prefix
               const dataArray = conversation_response.split("data: ");
               // Get the second last element of the array
