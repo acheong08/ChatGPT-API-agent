@@ -96,6 +96,21 @@ browser.storage.local.get("endpoint").then((result) => {
                   .then((response) => {
                     response.text().then((conversation_response) => {
                       console.log(conversation_response);
+                      // If response is {"detail":"Too many requests in 1 hour. Try again later."} then error
+                      if (conversation_response == '{"detail":"Too many requests in 1 hour. Try again later."}') {
+                        console.log("Error: Too many requests in 1 hour. Try again later.");
+                        // Return error
+                        let chatGPTresponse = {
+                          id: data.id,
+                          message: "error",
+                          data: "Too many requests in 1 hour. Try again later.",
+                          error: "Error: Too many requests in 1 hour. Try again later.",
+                        };
+                        ws.send(JSON.stringify(chatGPTresponse));
+                        // Close websocket connection
+                        ws.close();
+                        return;
+                      }
                       // Split data on "data: " prefix
                       const dataArray = conversation_response.split("data: ");
                       // Get the second last element of the array
