@@ -1,18 +1,14 @@
 browser.storage.local.get("endpoint").then((result) => {
-  if (result.endpoint) {
-    endpoint = result.endpoint;
-  } else {
-    endpoint = "localhost:8080";
-  }
-  let ws_route = "ws://" + endpoint + "/client/register";
-  let ws = new WebSocket(ws_route);
+  const endpoint = result.endpoint || "localhost:8080";
+  const ws_route = "ws://" + endpoint + "/client/register";
+  const ws = new WebSocket(ws_route);
   // On page refresh or exit, close the websocket connection
   window.onunload = function () {
     ws.close();
   };
   ws.onopen = function () {
     ws.onmessage = function (event) {
-      let data = JSON.parse(event.data);
+      const data = JSON.parse(event.data);
       console.log(data);
       if (data.message == "Connection id") {
         handleConnectionId(ws, data);
