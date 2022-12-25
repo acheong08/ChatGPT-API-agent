@@ -33,20 +33,7 @@ browser.storage.local.get("endpoint").then((result) => {
         ws.send(JSON.stringify(message));
       } else if (data.message == "ChatGptRequest") {
         // Construct API request
-        let request_data = JSON.parse(data.data).catch((error) => {
-          console.log(error);
-          // Return error
-          let chatGPTresponse = {
-            id: data.id,
-            message: "error",
-            data: "Unknown error",
-            error: error,
-          };
-          ws.send(JSON.stringify(chatGPTresponse));
-          // Close websocket connection
-          ws.close();
-          return;
-        });
+        let request_data = JSON.parse(data.data);
         // If conversation_id is "", make it undefined
         if (request_data.conversation_id == "") {
           request_data.conversation_id = undefined;
