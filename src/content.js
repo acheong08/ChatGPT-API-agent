@@ -12,20 +12,7 @@ browser.storage.local.get("endpoint").then((result) => {
   };
   ws.onopen = function () {
     ws.onmessage = function (event) {
-      let data = JSON.parse(event.data).catch((error) => {
-        console.log(error);
-        // Return error
-        let chatGPTresponse = {
-          id: data.id,
-          message: "error",
-          data: "Unknown error",
-          error: error,
-        };
-        ws.send(JSON.stringify(chatGPTresponse));
-        // Close websocket connection
-        ws.close();
-        return;
-      });
+      let data = JSON.parse(event.data);
 
       console.log(data);
       if (data.message == "Connection id") {
