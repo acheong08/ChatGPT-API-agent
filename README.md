@@ -41,5 +41,5 @@ services:
 ```
 1. create a folder that will contain the app data for firefox
 2. access container via `<ip-address>:5800` and finish the firefox setup
-3. procceed to follow step <a href="#top">1</a> in Setup section
+3. procceed to follow <a href="#top">step 1</a> in Setup section
 4. now follow steps in <a href="#top">Running section</a> 
