@@ -7,6 +7,7 @@ browser.storage.local.get("endpoint").then((result) => {
     ws.close();
   };
   ws.onopen = function () {
+    console.info("Connection opened");
     ws.onmessage = function (event) {
       const data = JSON.parse(event.data);
       console.log(data);
@@ -20,7 +21,7 @@ browser.storage.local.get("endpoint").then((result) => {
     };
   };
   ws.onclose = function () {
-    console.log("Connection closed");
+    console.info("Connection closed");
     delete connection_id;
   };
 });
