@@ -174,9 +174,9 @@ function handleChatGptRequest(ws, data) {
 function sendWebSocketMessage(ws, id, message, data, error) {
   try {
     const wsMessage = {
-      id: id,
-      message: message,
-      data: data,
+      id,
+      message,
+      data,
       error
     };
     ws.send(JSON.stringify(wsMessage));
