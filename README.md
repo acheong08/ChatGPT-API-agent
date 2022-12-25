@@ -20,3 +20,26 @@ This will spawn the same number of tabs as there are emails/passwords
 8. After that, it will autofill the password and continue to the chat site.
 
 Done. It connects to the endpoint and you can leave it open.
+
+<br>
+<br>
+<br>
+
+# Firefox Docker (optional)
+
+```yaml
+version: '3.3'
+services:
+    firefox:
+        container_name: firefox
+        ports:
+            - '5800:5800'
+        volumes:
+            - '<host folder path>:/config:rw'
+        image: jlesage/firefox
+
+```
+1. create a folder that will contain the app data for firefox
+2. access container via `<ip-address>:5800` and finish the firefox setup
+3. procceed to follow step <a href="#top">1</a> in Setup section
+4. now follow steps in <a href="#top">Running section</a> 
