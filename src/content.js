@@ -96,20 +96,26 @@ browser.storage.local.get("endpoint").then((result) => {
                   .then((response) => {
                     response.text().then((conversation_response) => {
                       console.log(conversation_response);
-                      // If response is {"detail":"Too many requests in 1 hour. Try again later."} then error
-                      if (conversation_response == '{"detail":"Too many requests in 1 hour. Try again later."}') {
-                        console.log("Error: Too many requests in 1 hour. Try again later.");
-                        // Return error
-                        let chatGPTresponse = {
-                          id: data.id,
-                          message: "error",
-                          data: "Too many requests in 1 hour. Try again later.",
-                          error: "Error: Too many requests in 1 hour. Try again later.",
-                        };
-                        ws.send(JSON.stringify(chatGPTresponse));
-                        // Close websocket connection
-                        ws.close();
-                        return;
+                      // Check if conversation_response can be parsed as JSON
+                      try {
+                        resp_json = JSON.parse(conversation_response);
+                        if (resp_json.detail) {
+                          console.log("Error: " + resp_json.detail);
+                          // Return error
+                          let chatGPTresponse = {
+                            id: data.id,
+                            message: "error",
+                            data: "Error: " + resp_json.detail,
+                          };
+                          ws.send(JSON.stringify(chatGPTresponse));
+                          // Close websocket connection
+                          ws.close();
+                          // refresh page
+                          window.location.reload();
+                          return;
+                        }
+                      } catch (e) {
+                        console.log("Not JSON");
                       }
                       // Split data on "data: " prefix
                       const dataArray = conversation_response.split("data: ");
