@@ -192,7 +192,7 @@ function sendWebSocketMessage(ws, id, message, data, error) {
  *
  * @async
  * @param {String} url The url to fetch from
- * @param {Object} options The options to pass to fetch
+ * @param {RequestInit} options The options to pass to fetch
  * @returns The response
  */
 async function fetchData(url, options = {}) {
