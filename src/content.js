@@ -216,3 +216,27 @@ function sendWebSocketMessage(ws, id, message, data, error) {
     console.error(error);
   }
 }
+
+/**
+ * Fetch data from an url with optional options.
+ * It will throw an error if the response is not ok, or if the status code is not 200.
+ *
+ * @async
+ * @param {String} url The url to fetch from
+ * @param {Object} options The options to pass to fetch
+ * @returns The response
+ */
+async function fetchData(url, options = {}) {
+  const response = await window.fetch(url, options);
+  if (!response.ok) {
+    throw new Error(`Request failed with status code: ${response.status}`);
+  }
+
+  if (response.status !== 200) {
+    // This isn't the best way to handle the status code check, but it works for now
+    throw new Error(`Wrong response code: ${response.status}`);
+  }
+
+  console.debug(response)
+  return response;
+}
