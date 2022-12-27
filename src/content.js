@@ -60,7 +60,7 @@ function handleConnectionId(ws, data) {
       storedConnectionId = cookie.split("=")[1];
     }
   }
-  console.log(storedConnectionId);
+  console.debug(`storedConnectionId ${storedConnectionId}`);
   // If it exists, send it to the server
   if (storedConnectionId) {
     sendWebSocketMessage(ws, storedConnectionId, "Connection id", "");
