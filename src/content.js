@@ -75,7 +75,7 @@ function handlePing(ws, data) {
   sendWebSocketMessage(ws, data.id, "pong", "");
 }
 
-function handleChatGptRequest(ws, data) {
+async function handleChatGptRequest(ws, data) {
   // Construct API request
   const requestData = JSON.parse(data.data);
   // If conversation_id is "", make it undefined
