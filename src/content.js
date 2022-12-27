@@ -100,7 +100,7 @@ async function handleChatGptRequest(ws, data) {
   try {
     const accessToken = await getAccessToken();
     const conversationResponse = await sendChatRequest(accessToken, payload);
-    const responseData = processResponse(conversationResponse);
+    const responseData = createResponseData(conversationResponse);
     sendWebSocketMessage(ws, data.id, "ChatGptResponse", responseData);
   } catch (error) {
     console.error(error);
@@ -156,7 +156,7 @@ async function sendChatRequest(accessToken, payload) {
   }
 }
 
-function processResponse(conversationResponse) {
+function createResponseData(conversationResponse) {
   return JSON.stringify({
     response_id: conversationResponse.message.id,
     conversation_id: conversationResponse.conversation_id,
