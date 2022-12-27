@@ -206,6 +206,5 @@ async function fetchData(url, options = {}) {
     throw new Error(`Wrong response code: ${response.status}`);
   }
 
-  console.debug(response)
   return response;
 }
