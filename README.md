@@ -43,3 +43,11 @@ services:
 2. access container via `<ip-address>:5800` and finish the firefox setup
 3. procceed to follow <a href="#top">step 1</a> in Setup section
 4. now follow steps in <a href="#top">Running section</a> 
+
+# Contributing
+In order to develop locally you need to use guide provided by Mozilla: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Your_first_WebExtension#trying_it_out and follow next steps:
+1. Clone this repository
+2. Go to `about:debugging` in Firefox
+3. Specify this directory as a temporary extension
+4. It will be loaded on top of the existing extension if you have one
+5. You can debug your new feature.
